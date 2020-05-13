@@ -1,0 +1,248 @@
+﻿@using System.Security.Claims
+@using FarukMC.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<FarukMC.Models.Booking>
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .custom-control-label::before, .custom-control-label::after {
+        top: 0.75rem;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <h5 class="card-header">Appointments</h5>
+        <div class="card-body">
+
+
+            <p>
+                <a asp-action="Create">Create New</a>
+            </p>
+            <div class="table-responsive">
+                <table class="table table table-striped text-center" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ID)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SurgeryStartingTime)
+                            </th>
+                            <th>
+                                Surgery Duration
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SurgeryRoom.SurgeryRoomDescription)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ItemsBooked)
+                            </th>
+                            <th>
+                                Total Booked Items
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PatientFullName)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.PatientGender)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PatientMRNnumber)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SurgeryName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SurgerySite)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SurgicalDepartment)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SurgeonID)
+                            </th>
+                            <th>
+                                Anesthetics
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AppointmentStatus)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PatientStatus)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CreatedDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ModifiedDate)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @item.ID
+                            </td>
+                            <td>
+                                @(item.SurgeryStartingTime.ToString("dd/MM/yyyy HH:mm"))
+                            </td>
+                            <td>
+                                @{
+                                    var timespan = item.SurgeryEndingTime.Subtract(item.SurgeryStartingTime).TotalMinutes;
+                                }
+                                @(Math.Round(timespan / 60, 2))
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SurgeryRoom.SurgeryRoomDescription)
+                            </td>
+                            <th>
+                                @Html.Raw(string.Join("</br>", item.ItemsBooked.Select(x => x.Item.Description.Trim()).ToArray()))
+                            </th>
+                            <th>
+                                @item.ItemsBooked.Count()
+                            </th>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PatientFullName)
+                            </td>
+                            <td>
+                                @((Gender)item.PatientGender)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PatientMRNnumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SurgeryName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SurgerySite)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SurgicalDepartment.SurgicalDepartmentDescription)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Surgeon.DisplayName)
+                            </td>
+                            <td>
+                                @item.Anesthetics?.Name
+                            </td>
+                            <td>
+                                @item.AppointmentStatus
+                            </td>
+                            <td>
+                                @item.PatientStatus
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ModifiedDate)
+                            </td>
+                            <td>
+                                @if (User.IsInRole("Administrator") || User.IsInRole("StatusUpdate") || (item.CreatedBy == User.FindFirst(ClaimTypes.NameIdentifier).Value && item.AppointmentStatus == AppointmentStatus.Pending))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                                    <span>|</span>
+                                }
+                                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<link href="~/css/addons/datatables.css" rel="stylesheet" />
+<link href="~/css/addons/datatables-select.css" rel="stylesheet" />
+@section Scripts{
+
+    <script src="~/js/addons/datatables.js"></script>
+    <script src="~/js/addons/datatables-select.js"></script>
+
+    <script>
+        var user = '@UserManager.FindByIdAsync(UserManager.GetUserId(User)).Result.DisplayName';
+
+        var table = $('#myTable').DataTable(
+            {
+                responsive: true,
+                "columnDefs": [
+                    {
+                        "targets": [4],
+                        "visible": false
+                    }
+                ]
+
+
+            });
+
+
+        $(document).ready(function() {
+
+
+            var aas;
+            var ps;
+            var sn;
+
+            $('#myTable thead tr th').each(function(i) {
+                var title = $(this).text();
+
+                if (title.includes('Appointment Status')) {
+                    aas = $(this).index() + 1;
+                }
+                if (title.includes('Patient Status')) {
+                    ps = $(this).index() + 1;
+                }
+                if (title.includes('Surgeon Name')) {
+                    sn = $(this).index() + 1;
+                }
+            });
+
+            @if (User.IsInRole("Surgeon"))
+            {
+                @:table.column(sn).search(user);
+            }
+            table.column(aas)
+                .search('pending')
+                .draw();
+
+            $(".dataTables_filter").prepend(
+                `<div class="custom-control custom-checkbox custom-control-inline mr-10" style='margin-right:50px'>
+                                        <input type="checkbox" class="custom-control-input mt-3 " id='showItems' onclick="if(table.column(4).visible()){table.column(4).visible(false)}else{table.column(4).visible(true)}">
+                                        <label class="custom-control-label" for='showItems' >
+                                            Show booked items
+                                        </label>
+                                    </div>`).prepend(
+                `<div class="custom-control custom-checkbox custom-control-inline mr-10" style='margin-right:50px'>
+                                        <input type="checkbox" class="custom-control-input mt-3" checked id='displayPending' onclick="if($(this).is(':checked')){ $('#displayPatient').prop('checked', false);table.column(${aas}).search('pending').draw();}else{table.column(${aas}).search('').draw();}">
+                                        <label class="custom-control-label" for='displayPending' >
+                                            Pending Appoinment Requests
+                                        </label>
+                                    </div>`).prepend(
+                `<div class="custom-control custom-checkbox custom-control-inline mr-10" style='margin-right:50px'>
+                                        <input type="checkbox" class="custom-control-input mt-3" id='displayPatient' onclick="if($(this).is(':checked')){$('#displayPending').prop('checked', false);table.column(${ps}).search('approved').column(${ps}).search('pending').draw();}else{table.column(${ps}).search('').column(${ps}).search('').draw();}">
+                                        <label class="custom-control-label" for='displayPatient' >
+                                            Pending Arrival
+                                        </label>
+                                    </div>`).prepend(
+                `<div class="custom-control custom-checkbox custom-control-inline mr-10" style='margin-right:50px'>
+                                        <input type="checkbox" class="custom-control-input mt-3" @(User.IsInRole("Surgeon") ? "checked" : "") id='myAppointments' onclick="if($(this).is(':checked')){table.column(${sn}).search('${user}').draw();}else{table.column(${sn}).search('').draw();}">
+                                        <label class="custom-control-label" for='myAppointments' >
+                                            My appointments
+                                        </label>
+                                    </div>`);
+        });
+
+
+    </script>
+}

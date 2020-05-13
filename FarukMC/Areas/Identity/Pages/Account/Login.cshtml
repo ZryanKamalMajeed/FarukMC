@@ -1,0 +1,189 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<style>
+
+    body {
+        padding-top: 60px;
+    }
+
+    html,
+    body,
+    header,
+    .view {
+        height: calc(100vh - 60px);
+    }
+
+    @@media (max-width: 740px) {
+        html,
+        body,
+        header,
+        .view {
+            height: 815px;
+        }
+    }
+
+    @@media (min-width: 800px) and (max-width: 850px) {
+        html,
+        body,
+        header,
+        .view {
+            height: 650px;
+        }
+    }
+
+    .intro-2 {
+        background: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img%20(11).jpg")no-repeat center center;
+        background-size: cover;
+    }
+
+    .top-nav-collapse {
+        background-color: #3f51b5 !important;
+    }
+
+    .navbar:not(.top-nav-collapse) {
+        background: transparent !important;
+    }
+
+    @@media (max-width: 768px) {
+        .navbar:not(.top-nav-collapse) {
+            background: #3f51b5 !important;
+        }
+    }
+
+    @@media (min-width: 800px) and (max-width: 850px) {
+        .navbar:not(.top-nav-collapse) {
+            background: #3f51b5 !important;
+        }
+    }
+
+    .card {
+        background-color: rgba(229, 228, 255, 0.2);
+    }
+
+    .md-form label {
+        color: #ffffff;
+    }
+
+    h6 {
+        line-height: 1.7;
+    }
+
+
+    .card {
+        margin-top: 30px;
+        /*margin-bottom: -45px;*/
+    }
+
+    .md-form input[type=text]:focus:not([readonly]),
+    .md-form input[type=password]:focus:not([readonly]) {
+        border-bottom: 1px solid #8EDEF8;
+        box-shadow: 0 1px 0 0 #8EDEF8;
+    }
+
+        .md-form input[type=text]:focus:not([readonly]) + label,
+        .md-form input[type=password]:focus:not([readonly]) + label {
+            color: #8EDEF8;
+        }
+
+    .md-form .form-control {
+        color: #fff;
+    }
+</style>
+
+
+
+
+<!--Main Navigation-->
+<header>
+
+
+    <!--Intro Section-->
+    <section class="view intro-2">
+        <div class="mask rgba-stylish-strong h-100 d-flex justify-content-center align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-6 col-md-10 col-sm-12 mx-auto mt-lg-5">
+
+                        <!--Form with header-->
+                        <div class="card wow fadeIn" data-wow-delay="0.3s">
+                            <div class="card-body">
+                                <form id="account" method="post">
+                                    <!--Header-->
+                                    <div class="form-header purple-gradient">
+                                        <h3><i class="fas fa-user mt-2 mb-2"></i> Log in:</h3>
+                                    </div>
+
+                                    <!--Body-->
+                                    <div asp-validation-summary="All" class="text-danger"></div>
+                                    <div class="md-form">
+                                        <i class="fas fa-envelope prefix white-text"></i>
+                                        <input type="text" asp-for="Input.UserName" class="form-control">
+                                        <label asp-for="Input.UserName"></label>
+                                    </div>
+
+                                    <div class="md-form">
+                                        <i class="fas fa-lock prefix white-text"></i>
+                                        <input type="password" asp-for="Input.Password" class="form-control">
+                                        <label asp-for="Input.Password"></label>
+                                    </div>
+                                    <div class="md-form ">
+
+                                        <div class="custom-control custom-checkbox ml-5">
+                                            <input type="checkbox" class="custom-control-input form-control" asp-for="Input.RememberMe">
+                                            <label class="custom-control-label" asp-for="Input.RememberMe">Remember Me</label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button class="btn purple-gradient btn-lg">Sign in</button>
+
+                                    </div>
+                                </form>
+
+                                @*<a asp-area="Identity" asp-page="/Account/ForgotPassword" style="color:white" tabindex="-1">Forgot Password</a>
+
+                                <div>
+                                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+
+
+                                        <div class="inline-ul text-center d-flex justify-content-center">
+                                            <button type="submit" class="fa-lg fb-ic btn-link border-0" name="provider" value="Facebook" title="Log in using your Facebook account"><i class="fab fa-facebook white-text"></i></button>
+
+                                        </div>
+                                    </form>
+                                </div>*@
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--/Form with header-->
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</header>
+<!--Main Navigation-->
+
+@section Scripts {
+    <script>
+        new WOW().init();
+
+    </script>
+    <script>
+        $('#Input_UserName').focus();
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

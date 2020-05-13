@@ -1,0 +1,25 @@
+﻿@model FarukMC.ViewModel.CreateRoleViewModel
+
+@{
+    ViewBag.Title = "Create a new Role";
+}
+<div id="home" class="view jarallax" data-jarallax='{"speed": 0.2}'>
+    <div class="container" >
+
+        <div class="row">
+            <div class="col-12">
+                <form method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="RoleName"></label>
+                        <input asp-for="RoleName" class="form-control" />
+                        <span asp-validation-for="RoleName" class="text-danger"></span>
+                    </div>
+                    <button style="width: auto" type="submit" class="btn btn-primary">Create Role</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>

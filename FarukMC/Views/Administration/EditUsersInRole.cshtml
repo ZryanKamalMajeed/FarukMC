@@ -1,0 +1,38 @@
+﻿@model List<FarukMC.ViewModel.UserRoleViewModel>
+@{
+    ViewData["Title"] = "EditUsersInRole";
+    var roleId = ViewBag.roleId;
+}
+
+
+
+    <div id="home" class="view jarallax" data-jarallax='{"speed": 0.2}'>
+        <div class="container" >
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Add or remove users from this role</h2>
+                </div>
+                <form method="post">
+                    <div class="card-body">
+                        @for (var i = 0; i < Model.Count; i++)
+                        {
+                            <div class="custom-control custom-checkbox m1">
+                                <input type="hidden" asp-for="@Model[i].UserName" />
+                                <input type="hidden" asp-for="@Model[i].UserID" />
+                                <input asp-for="@Model[i].IsSelected" class="custom-control-input" />
+                                <label asp-for="@Model[i].IsSelected" class="custom-control-label">@Model[i].UserName</label>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" value="Update" class="btn btn-primary" style="width: auto" />
+                        <a asp-action="EditRole" asp-route-Id="@roleId" class="btn btn-primary" style="width: auto">Cancel</a>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>

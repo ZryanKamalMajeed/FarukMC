@@ -1,0 +1,33 @@
+﻿@model FarukMC.Models.SurgeryRoom
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+<div class="container">
+    <div class="card">
+        <h5 class="card-header">Delete Surgery Room</h5>
+        <div class="card-body">
+            <h3>Are you sure you want to delete this?</h3>
+            <div>
+              <hr/>
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.SurgeryRoomDescription)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.SurgeryRoomDescription)
+                    </dd>
+                </dl>
+                <div class="card-footer">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" /> |
+                        <a asp-action="Index">Back to List</a>
+                    </form>
+                </div>
+                </div>
+            </div>
+    </div>
+</div>

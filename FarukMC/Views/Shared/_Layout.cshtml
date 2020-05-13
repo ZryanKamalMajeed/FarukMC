@@ -1,0 +1,171 @@
+﻿@using System.IO
+@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Routing
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>
+        FMC Booking
+    </title>
+
+    <meta charset="utf-8" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/mdb.css" rel="stylesheet" />
+
+    <!-- Material Design Bootstrap -->
+
+    <title>@ViewData["Title"] - FarukMC</title>
+
+    <link rel="icon" href='@(Url.Content("~/favicon.ico"))' type="image/x-icon">
+    <style>
+        .navbar-expand-lg .navbar-nav {
+            align-items: center;
+        }
+
+        body {
+          padding-top: 90px;
+          padding-bottom:20px;
+        }
+        @@media (max-width: 980px) {
+            body {
+                padding-top: 70px;
+            }
+        }
+       
+    </style>
+</head>
+
+@{
+
+}
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="true" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand mr-5" asp-controller="Home" asp-action="Index">FMC Booking</a>
+
+        <div class="navbar-collapse collapse" id="navbarTogglerDemo03" style="">
+            <ul class="navbar-nav mr-auto smooth-scroll">
+                <li class="nav-item @Html.IsActive("Booking") mr-3">
+                    <a class="nav-link waves-effect waves-light" asp-controller="Booking" asp-action="Index">Appointments</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                @if (Context.User.IsInRole("Administrator"))
+                {
+                    <li class="nav-item dropdown @Html.IsActive("Administration") mr-3">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Admin
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" asp-controller="Administration" asp-action="ListUsers">Users</a> 
+                            <a class="dropdown-item" asp-controller="Administration" asp-action="ListRoles">Roles</a>
+                        </div>
+                    </li>
+                    <li class="nav-item @Html.IsActive("SurgeryRoom") mr-3">
+                        <a class="nav-link waves-effect waves-light" asp-controller="SurgeryRoom" asp-action="Index">Surgery Rooms</a>
+                    </li>
+                    <li class="nav-item @Html.IsActive("Items") mr-3">
+                        <a class="nav-link waves-effect waves-light" asp-controller="Items" asp-action="Index">Items</a>
+                    </li>
+                    <li class="nav-item @Html.IsActive("AnesthesiaTechnique") mr-3">
+                        <a class="nav-link waves-effect waves-light" asp-controller="AnesthesiaTechnique" asp-action="Index">Anesthesia Techniques</a>
+                    </li>
+                    <li class="nav-item @Html.IsActive("SurgicalDepartment")">
+                        <a class="nav-link waves-effect waves-light" asp-controller="SurgicalDepartment" asp-action="Index">Surgical Departments</a>
+                    </li>
+                    <li class="nav-item @Html.IsActive("Anesthetics")">
+                        <a class="nav-link waves-effect waves-light" asp-controller="Anesthetics" asp-action="Index">Anesthetics</a>
+                    </li>
+                }
+
+                <partial name="_LoginPartial" />
+            </ul>
+        </div>
+    </nav>
+    
+
+    @RenderBody()
+
+    <div id="alert_modal" class="modal fade" onclick="alertOK()">
+        <div class="modal-dialog" onclick="event.stopPropagation()">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <h6 class="modal-title">Alert</h6>
+                    <button type="button" class="close" onclick="alertOK()">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    body
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" onclick="alertOK()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm_modal" class="modal fade" onclick="ConfirmCancel()">
+        <div class="modal-dialog" onclick="event.stopPropagation()">
+            <div class="modal-content">
+                <div class="modal-header bg-blue">
+                    <h6 class="modal-title">Alert</h6>
+                    <button type="button" class="close" onclick="ConfirmCancel()" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    body
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" onclick="ConfirmOK()">OK</button>
+                    <button type="button" class="btn btn-link" onclick="ConfirmCancel()" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.Footer-->
+    <!--  SCRIPTS  -->
+    <!--  JQuery  -->
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    <!--  Bootstrap tooltips  -->
+    <script type="text/javascript" src="/js/popper.min.js"></script>
+    <!--  Bootstrap core JavaScript  -->
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <!--  MDB core JavaScript  -->
+    <script type="text/javascript" src="/js/mdb.min.js"></script>
+    <!--	Plugin for the Datepicker, full documentation here: https://github.com/Eonasdan/bootstrap-datetimepicker -->
+    <script src="~/js/modules/moment.min.js"></script>
+    <script src="~/js/modules/bootstrap-datetimepicker.js"></script>
+
+    <!-- Custom scripts -->
+    <script>
+
+        // Animation init
+        //new WOW().init();
+
+        // MDB Lightbox Init
+        $(function () {
+            $("#mdb-lightbox-ui").load("/mdb-addons/mdb-lightbox-ui.html");
+        });
+
+    </script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/prompts.js"></script>
+    <script src="~/js/popper.min.js"></script>
+
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

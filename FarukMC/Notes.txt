@@ -1,0 +1,29 @@
+﻿1- Created the project with asp.net mvc core 3.1 and identity
+2- addes scaffolded to the project
+3- added migration (add-migration Step_01_AddedIdentityTablesAndDB)
+4- Copied the below classes from the origional solution:-
+		AnesthesiaTechnique.cs
+		Anesthetics.cs
+		Booking.cs
+		ItemsBooked.cs
+		SurgeryRoom.cs
+		SurgicalDepartment.cs
+		Item.cs
+and changed the required name spaces and references
+5- Copied Services folder and changed the namespace for Extensions.cs 
+6- Copied data folder with ApplicationUser.cs from the original solution to Identity folder and changed the required references
+7- Add the folder ViewModel and do the requried namespace changes
+8- Replace Index page (inside views/home) wiht the original codes
+9- add @using FMC.Services to _ViewImports.cshtml and change the references if needed
+10- Install the below packages:-
+			Microsoft.AspNetCore.Authentication.Facebook ( version 3.1.2 )
+			Microsoft.EntityFrameworkCore.Sqlite (Version 3.1.2)
+			Microsoft.Extensions.Logging.Debug (Version 3.1.2)
+			NETCore.MailKit (Version 2.0.2)
+11- Copied IBookingRepository.cs to Models folder and change the references
+12- Copy ApplicationDbContext.cs and change the namespaces
+13- Copy all models and do the necessary changes in the namespaces
+14- Copy all controllers and do the necessary changes in the namespaces
+15- Copy Startup.cs
+16- Copy Identity folder
+

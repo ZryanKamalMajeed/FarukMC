@@ -1,0 +1,31 @@
+﻿@model FarukMC.Models.SurgeryRoom
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container">
+    <div class="card">
+        <h5 class="card-header">Surgery Room Details</h5>
+        <div class="card-body">
+
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.SurgeryRoomDescription)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.SurgeryRoomDescription)
+                </dd>
+            </dl>
+
+
+        </div>
+        <div class="card-footer">
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

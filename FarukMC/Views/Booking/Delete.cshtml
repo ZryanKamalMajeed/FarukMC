@@ -1,0 +1,223 @@
+﻿@model FarukMC.Models.Booking
+
+@{
+    ViewData["Title"] = "Delete";
+}
+@using Microsoft.AspNetCore.Identity
+@using FarukMC.Areas.Identity.Data
+@inject UserManager<ApplicationUser> UserManager
+<div class="container" id="app">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <h5 class="card-header">Delete Appointment</h5>
+                <div class="card-body">
+
+                    <div class="card-text">
+                        <dl class="row">
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SurgeryStartingTime)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SurgeryStartingTime)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SurgeryEndingTime)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SurgeryEndingTime)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SurgeryRoom)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SurgeryRoom.SurgeryRoomDescription)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.ItemsBooked)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.Raw(string.Join("</br>", Model.ItemsBooked.Select(x => x.Item.Description.Trim()).ToArray()))
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.PatientFullName)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.PatientFullName)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.PatientDateOfBirth)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.PatientDateOfBirth)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.PatientGender)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.PatientGender)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.PatientMRNnumber)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.PatientMRNnumber)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SurgeryName)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SurgeryName)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SurgerySite)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SurgerySite)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SurgicalDepartment)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SurgicalDepartment.SurgicalDepartmentDescription)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SurgeonID)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SurgeonID)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.BloodRequested)
+                            </dt>
+                            <dd class="col-md-8 d-flex">
+                                @Html.DisplayFor(model => model.BloodRequested)&nbsp;&nbsp;@Html.DisplayFor(model => model.BloodRequestedText)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.RequestedPostOperativeCare)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.RequestedPostOperativeCare)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SurgeryPosition)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SurgeryPosition)&nbsp;&nbsp;@Html.DisplayFor(model => model.SurgeryPositionText)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.FrozenSection)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.FrozenSection)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SpecialThingsLikeSutures)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SpecialThingsLikeSutures)&nbsp;&nbsp;@Html.DisplayFor(model => model.SpecialThingsLikeSuturesText)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.Consumables)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.Consumables)&nbsp;&nbsp;@Html.DisplayFor(model => model.ConsumablesText)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.AnesthesiaTechnique)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.AnesthesiaTechnique.Text)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.SpecialDevices)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.SpecialDevices)&nbsp;&nbsp;@Html.DisplayFor(model => model.SpecialDevicesText)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.Turniquet)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.Turniquet)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.CArm)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.CArm)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.Harmonic)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.Harmonic)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.Ligasure)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.Ligasure)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.Microscope)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.Microscope)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.Others)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.Others)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.AppointmentStatus)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.AppointmentStatus)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.PatientStatus)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.PatientStatus)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.CreatedBy)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => UserManager.FindByIdAsync(model.CreatedBy).Result.DisplayName)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.CreatedDate)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.CreatedDate)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.ModifiedBy)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => UserManager.FindByIdAsync(model.ModifiedBy).Result.DisplayName)
+                            </dd>
+                            <dt class="col-md-4">
+                                @Html.DisplayNameFor(model => model.ModifiedDate)
+                            </dt>
+                            <dd class="col-md-8">
+                                @Html.DisplayFor(model => model.ModifiedDate)
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="ID" />
+                        <input type="submit" value="Delete" class="btn btn-danger" /> |
+                        <a asp-action="Index">Back to List</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

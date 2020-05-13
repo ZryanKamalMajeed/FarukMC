@@ -1,0 +1,541 @@
+﻿@model FarukMC.ViewModel.CreateBookingViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+@using Microsoft.AspNetCore.Identity
+@using FarukMC.Areas.Identity.Data
+@inject UserManager<ApplicationUser> UserManager
+<style>
+    .move-left {
+        width: 15px;
+        box-shadow: none;
+    }
+
+    .custom-control-label {
+        vertical-align: middle;
+    }
+
+    /*.select2-results__option[aria-selected=true] {
+        display: none;
+    }*/
+</style>
+
+<div class="container" id="app">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <h5 class="card-header">Create an Appointment</h5>
+                <div class="card-body">
+
+                    <div class="card-text">
+                        <form asp-action="Create" method="post" autocomplete="off">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group row">
+                                <label asp-for="SurgeryStartingTime" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input asp-for="SurgeryStartingTime" class="form-control timepicker validate" type="text" autocomplete="off" />
+                                    <span asp-validation-for="SurgeryStartingTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="SurgeryEndingTime" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input asp-for="SurgeryEndingTime" class="form-control timepicker validate" type="text" autocomplete="off" />
+                                    <span asp-validation-for="SurgeryEndingTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="SurgeryRoomId" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <select class="form-control" width="100%" asp-for="SurgeryRoomId">
+                                        <option disabled selected="selected">--- SELECT ---</option>
+                                        <option v-for="(item, key) in rooms" :value="item.id">
+                                            {{item.description}}
+                                        </option>
+                                    </select>
+                                    <span asp-validation-for="SurgeryRoomId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="ItemsBooked" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <select id="dualList" multiple="multiple" :data-source="itemsBooked" style="height:300px">
+                                        <option v-for="(item, key) in items" :value="item.id">
+                                            {{item.description}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <input type="hidden" asp-for="BookedItemsList" />
+                            </div>
+
+                            <div class="form-group row">
+                                <label asp-for="PatientFullName" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input asp-for="PatientFullName" class="form-control" />
+                                    <span asp-validation-for="PatientFullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="PatientDateOfBirth" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input asp-for="PatientDateOfBirth" class="form-control datepicker" type="text" />
+                                    <span asp-validation-for="PatientDateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="PatientGender" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="PatientGender" class="form-control" asp-items="Html.GetEnumSelectList<Gender>()"></select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="PatientMRNnumber" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input asp-for="PatientMRNnumber" class="form-control" />
+                                    <span asp-validation-for="PatientMRNnumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="SurgeryName" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input asp-for="SurgeryName" class="form-control" />
+                                    <span asp-validation-for="SurgeryName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="SurgerySite" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input asp-for="SurgerySite" class="form-control" />
+                                    <span asp-validation-for="SurgerySite" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="SurgicalDepartmentId" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="SurgicalDepartmentId" class="form-control" asp-items="ViewBag.SurgicalDepartmentId">
+                                        <option disabled selected>--- SELECT ---</option>
+                                    </select>
+                                    <span asp-validation-for="SurgicalDepartmentId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="SurgeonID" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="SurgeonID" class="form-control" asp-items="ViewBag.SurgeonId">
+                                        <option disabled selected>--- SELECT ---</option>
+                                    </select>
+                                    <span asp-validation-for="SurgeonID" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="BloodRequested"></label>
+
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" v-model="bloodRequested" class="custom-control-input move-left form-control" asp-for="BloodRequested">
+                                        <label class="custom-control-label" asp-for="BloodRequested">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                    <input asp-for="BloodRequestedText" type="text" class="form-control" v-if="bloodRequested" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="RequestedPostOperativeCare"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="RequestedPostOperativeCare">
+                                        <label class="custom-control-label" asp-for="RequestedPostOperativeCare">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="SurgeryPosition"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="SurgeryPosition" v-model="surgeryPosition">
+                                        <label class="custom-control-label" asp-for="SurgeryPosition">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                    <input asp-for="SurgeryPositionText" type="text" class="form-control" v-if="surgeryPosition" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="FrozenSection"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="FrozenSection">
+                                        <label class="custom-control-label" asp-for="FrozenSection">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="SpecialThingsLikeSutures"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="SpecialThingsLikeSutures" v-model="specialThingsLikeSutures">
+                                        <label class="custom-control-label" asp-for="SpecialThingsLikeSutures">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                    <input asp-for="SpecialThingsLikeSuturesText" class="form-control" v-if="specialThingsLikeSutures" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="Consumables"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="Consumables" v-model="consumables">
+                                        <label class="custom-control-label" asp-for="Consumables">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                    <input asp-for="ConsumablesText" type="text" class="form-control" v-if="consumables" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label asp-for="AnesthesiaTechniqueId" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="AnesthesiaTechniqueId" class="form-control" asp-items="ViewBag.AnesthesiaTechniqueId">
+                                        <option disabled selected>--- SELECT ---</option>
+                                    </select>
+                                    <span asp-validation-for="AnesthesiaTechniqueId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="SpecialDevices"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="SpecialDevices" v-model="specialDevices">
+                                        <label class="custom-control-label" asp-for="SpecialDevices">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                    <input asp-for="SpecialDevicesText" type="text" class="form-control" v-if="specialDevices" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="Turniquet"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="Turniquet">
+                                        <label class="custom-control-label" asp-for="Turniquet">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="CArm"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="CArm">
+                                        <label class="custom-control-label" asp-for="CArm">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="Harmonic"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="Harmonic">
+                                        <label class="custom-control-label" asp-for="Harmonic">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="Ligasure"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="Ligasure">
+                                        <label class="custom-control-label" asp-for="Ligasure">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3" asp-for="Microscope"></label>
+                                <div class="col-md-9 d-flex">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input move-left form-control" asp-for="Microscope">
+                                        <label class="custom-control-label" asp-for="Microscope">
+                                            <p></p>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label asp-for="Others" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input asp-for="Others" class="form-control" />
+                                    <span asp-validation-for="Others" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="AppointmentStatus" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="AppointmentStatus" class="form-control" asp-items="@(User.IsInRole("StatusUpdate") ? Html.GetEnumSelectList<AppointmentStatus>() :Html.GetEnumSelectList<AppointmentStatus>().Where(x => x.Text == "Pending"))">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="PatientStatus" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <select asp-for="PatientStatus" class="form-control" asp-items="@(User.IsInRole("StatusUpdate") ? Html.GetEnumSelectList<PatientStatus>() : Html.GetEnumSelectList<PatientStatus>().Where(x => x.Text == "Pending"))">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="CreatedBy" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input readonly class="form-control" type="text" value="@UserManager.FindByIdAsync(UserManager.GetUserId(User)).Result.DisplayName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="CreatedDate" class="col-md-3 col-form-label"></label>
+                                <div class="col-md-9">
+                                    <input  readonly class="form-control" type="text" value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm")" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div>
+                        <a asp-action="Index">Back to List</a>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@*<link href="~/css/addons/select2.css" rel="stylesheet" />*@
+<link href="~/css/addons/component.css" rel="stylesheet" />
+<link href="~/css/addons/bootstrap-duallistbox.css" rel="stylesheet" />
+@section Scripts
+{
+    <script src="~/js/modules/addons/jquery.bootstrap-duallistbox.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/vue.min.js"></script>
+
+    @*<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>*@
+    @*<script src="~/js/addons/select2.js"></script>*@
+    <script>
+
+        var allRooms = @Html.Raw(ViewBag.Rooms);
+        var allItems = @Html.Raw(ViewBag.Item);
+
+        new Vue({
+            el: '#app',
+                data:{
+                    endTime: '@Model?.SurgeryEndingTime.ToString("dd/MM/yyyy HH:mm")',
+                    startTime: '@Model?.SurgeryStartingTime.ToString("dd/MM/yyyy HH:mm")',
+                    rooms: [],
+                    items: [],
+                    appointments: @Html.Raw(ViewBag.Appointments),
+                    itemsBooked:[],
+                    bloodRequested: @Json.Serialize(Model?.BloodRequested),
+                    consumables: @Json.Serialize(Model?.Consumables),
+                    specialThingsLikeSutures: @Json.Serialize(Model?.SpecialThingsLikeSutures),
+                    surgeryPosition: @Json.Serialize(Model?.SurgeryPosition),
+                    specialDevices: @Json.Serialize(Model?.SpecialDevices)
+                },
+                mounted() {
+                    var self = this; // the vue instance
+                    self.rooms = allRooms;
+                    self.items = allItems;
+
+                    self.$nextTick(() => {
+                        $("#SurgeryStartingTime").on("dp.change",
+                            function(e) {
+                                if (!e.date) {
+                                    self.startTime = '';
+                                    $('#SurgeryEndingTime').data("DateTimePicker").minDate(false);
+                                } else {
+                                    $('#SurgeryEndingTime').data("DateTimePicker").minDate(e.date);
+                                    self.startTime = e.date.format('DD/MM/YYYY HH:mm');
+                                }
+                                if (self.datesAreFilled) {
+                                    self.updateFields();
+                                }
+                            });
+                        $("#SurgeryEndingTime").on("dp.change",
+                            function(e) {
+                                if (!e.date) {
+                                    $('#SurgeryStartingTime').data("DateTimePicker").maxDate(false);
+                                    self.endTime = '';
+                                } else {
+                                    $('#SurgeryStartingTime').data("DateTimePicker").maxDate(e.date);
+                                    self.endTime = e.date.format('DD/MM/YYYY HH:mm');
+                                }
+                                if (self.datesAreFilled) {
+                                    self.updateFields();
+                                }
+                            });
+                        if (self.datesAreFilled) {
+                                    self.updateFields();
+                                }
+                         @if(Model != null){
+                            @:$('#SurgeryRoomId').val('@Model.SurgeryRoomId');
+                         }
+                    });
+                },
+                computed: {
+                    datesAreFilled: function () {
+                        return (this.startTime != '' && this.endTime != '');
+                    },
+                    matchAppointments: function () {
+
+                        if (this.datesAreFilled) {
+                            var self = this;
+
+                            var matches = this.appointments.filter(function (e) {
+                                return moment(self.startTime, 'DD/MM/YYYY HH:mm') < moment(e.endTime) &&
+                                    moment(self.endTime, 'DD/MM/YYYY HH:mm') > moment(e.startTime);
+                            })
+                            return matches;
+                    }},
+                    occupiedRooms: function () {
+                        var rooms = this.matchAppointments.map(a => a.roomId);
+                        return rooms;
+                    },
+                    itemsTaken: function () {
+
+                        var arrays = this.matchAppointments.filter(x=>x.itemsBooked.length > 0).map(function(e) {return e.itemsBooked.map(function(e) {return e.itemId})});
+                        return [].concat.apply([], arrays);
+                    }
+                },
+                methods: {
+                     updateFields: function (){
+
+                         var self= this;
+
+                        self.rooms = allRooms.filter(x => {
+
+                            return self.occupiedRooms.indexOf(x.id) === -1;
+                        });
+                        var uniqueItems = [...allItems];
+                        var toRemove = Object.values(self.itemsTaken);
+                        if (toRemove.length) {
+
+                            var selectedItems = $('#dualList').val()
+                            for (var i = 0; i < toRemove.length; i++) {
+                                var s = selectedItems.indexOf('' + toRemove[i]);
+                                if(s !== -1)
+                                    selectedItems.splice(s,1);
+                            }
+
+                            var allItemsIds = uniqueItems.map(x=>x.id)
+
+                            uniqueItems =  uniqueItems.filter(function(val) {
+                                return toRemove.indexOf(val.id) === -1;
+                            });
+
+                                $('#dualList').val(selectedItems);
+                            }
+
+
+                        self.items = uniqueItems;
+
+                        this.$nextTick(() => {
+                                $('#dualList').bootstrapDualListbox('refresh');
+                            });
+
+                    }
+
+                }
+
+                });
+
+        $('#SurgeryStartingTime').datetimepicker({
+            format:'DD/MM/YYYY HH:mm',
+            icons: {
+                time: "fa fa-clock",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: "fa fa-chevron-left",
+                next: "fa fa-chevron-right",
+                today: "fa fa-screenshot",
+                clear: "fa fa-trash",
+                close: "fa fa-remove"
+            }
+        });
+        $('#SurgeryEndingTime').datetimepicker({
+            useCurrent: false, //Important! See issue #1075
+            format:'DD/MM/YYYY HH:mm',
+            icons: {
+                time: "fa fa-clock",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: "fa fa-chevron-left",
+                next: "fa fa-chevron-right",
+                today: "fa fa-screenshot",
+                clear: "fa fa-trash",
+                close: "fa fa-remove"
+            }
+
+        });
+        $("#SurgeryStartingTime").on("dp.change", function (e) {
+            $('#SurgeryEndingTime').data("DateTimePicker").minDate(e.date);
+        });
+        $("#SurgeryEndingTime").on("dp.change", function (e) {
+            $('#SurgeryStartingTime').data("DateTimePicker").maxDate(e.date);
+
+        });
+
+
+
+        $("form").submit(function (e) {
+            $('#BookedItemsList').val($('#dualList').val());
+        });
+
+
+
+        $('.datepicker').datetimepicker({
+            format: 'DD/MM/YYYY',
+            icons: {
+                time: "fa fa-clock-o",
+                date: "fa fa-calendar",
+                up: "fa fa-chevron-up",
+                down: "fa fa-chevron-down",
+                previous: "fa fa-chevron-left",
+                next: "fa fa-chevron-right",
+                today: "fa fa-screenshot",
+                clear: "fa fa-trash",
+                close: "fa fa-remove"
+            }
+        });
+
+
+
+        $("#AppointmentRequestDate").on("dp.change", function (e) {
+            $('#SurgeryStartingTime').data("DateTimePicker").maxDate(e.date);
+        });
+
+        $(document).ready(function () {
+            moment.locale('en-AU');
+            var dualList = $('#dualList').bootstrapDualListbox();
+         })
+    </script>
+}
+

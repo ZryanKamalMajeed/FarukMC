@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+}
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IWebHostEnvironment WebHostEnvironment
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Identity
+@using FarukMC.Areas.Identity.Data
+@using Newtonsoft.Json
+@model FarukMC.ViewModel.IndexViewModel
+
+
+<div class="container-fluid">
+    <div id="calendar"></div>
+</div>
+<link href="~/css/jquery-calendar.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="~/js/jquery-calendar.js"></script>
+    <script src="~/js/jquery.touchSwipe.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            //init DateTimePickers
+            $(".datetimepicker").datetimepicker({
+                format: 'DD/MM/YYYY',
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-chevron-up",
+                    down: "fa fa-chevron-down",
+                    previous: "fa fa-chevron-left",
+                    next: "fa fa-chevron-right",
+                    today: "fa fa-screenshot",
+                    clear: "fa fa-trash",
+                    close: "fa fa-remove"
+                }
+            });
+
+
+            moment.locale('en');
+            var now = moment();
+            var rawevents = @Html.Raw(JsonConvert.DeserializeObject(Model.JsonResult));
+            rawevents.forEach(function(part, index) {
+                    this[index]['start'] = moment(this[index]['start'], 'MM-DD-YYYY HH:mm').format('X');
+                    this[index]['end'] = moment(this[index]['end'], 'MM-DD-YYYY HH:mm').format('X');
+                },
+                rawevents);
+            events = rawevents;
+
+
+            /**
+             * A daynote
+             */
+            var daynotes = [
+                {
+                    //time: now.startOf('week').add(15, 'h').add(30, 'm').format('X'),
+                    //title: 'Leo\'s holiday',
+                    //content: 'yo',
+                    //category: 'holiday'
+                
+                }
+            ];
+
+            /**
+             * Init the calendar
+             */
+            
+            var calendar = $('#calendar').Calendar({
+                colors: {
+                    random: false
+                },
+
+                locale: 'en',
+                weekday: {
+                    timeline: {
+                        intervalMinutes: 60,
+                        fromHour: 8
+                    }
+                },
+
+                events: events,
+                daynotes: daynotes
+            }).init();
+
+            /**
+             * Listening for events
+             */
+
+            $('#calendar').on('Calendar.init',
+                function(event, instance, before, current, after) {
+                    console.log('event : Calendar.init');
+                    console.log(instance);
+                    console.log(before);
+                    console.log(current);
+                    console.log(after);
+                });
+            $('#calendar').on('Calendar.daynote-mouseenter',
+                function(event, instance, elem) {
+                    console.log('event : Calendar.daynote-mouseenter');
+                    console.log(instance);
+                    console.log(elem);
+                });
+            $('#calendar').on('Calendar.daynote-mouseleave',
+                function(event, instance, elem) {
+                    console.log('event : Calendar.daynote-mouseleave');
+                    console.log(instance);
+                    console.log(elem);
+                });
+            $('#calendar').on('Calendar.event-mouseenter',
+                function(event, instance, elem) {
+                    console.log('event : Calendar.event-mouseenter');
+                    console.log(instance);
+                    console.log(elem);
+                });
+            $('#calendar').on('Calendar.event-mouseleave',
+                function(event, instance, elem) {
+                    console.log('event : Calendar.event-mouseleave');
+                    console.log(instance);
+                    console.log(elem);
+                });
+            $('#calendar').on('Calendar.daynote-click',
+                function(event, instance, elem, evt) {
+                    console.log('event : Calendar.daynote-click');
+                    console.log(instance);
+                    console.log(elem);
+                    console.log(evt);
+                });
+            $('#calendar').on('Calendar.event-click',
+                function(event, instance, elem, evt) {
+                    console.log('event : Calendar.event-click');
+                    console.log(instance);
+                    console.log(elem);
+                    console.log(evt);
+                });
+        });
+    </script>
+}
